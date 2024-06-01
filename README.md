@@ -20,7 +20,7 @@ export function MyCheckoutPage() {
 
 ## Components
 
-### `<PaymentElement />` {#PaymentElement}
+### `<PaymentElement />`
 
 Creates a [Payrex Payment Element integration](https://docs.payrexhq.com/docs/guide/developer_handbook/payments/integrations/elements#2-create-a-checkout-page-on-the-client-side), which is basically a drop-in payment interface inserted in your checkout page.
 
