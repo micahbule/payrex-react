@@ -8,19 +8,21 @@ type CheckoutProps = {
   paymentMethods?: string[];
 	paymentIntentUrl?: string;
 	layout?: string;
+  paymentElementId?: string;
 };
 
 const DEFAULT_PAYMENT_METHODS = ['card', 'gcash'];
 const DEFAULT_PAYMENT_INTENT_URL = '/api/payrex/payment-intent';
+const DEFAULT_PAYMENT_ELEMENT_ID = 'payment-element';
 
 export function PaymentElement({
 	apiKey,
   amount,
   paymentMethods = DEFAULT_PAYMENT_METHODS,
 	paymentIntentUrl = DEFAULT_PAYMENT_INTENT_URL,
+  paymentElementId = DEFAULT_PAYMENT_ELEMENT_ID,
 	layout = "accordion",
 }: CheckoutProps) {
-	const paymentElementId = "payment-element";
 	const libStatus = useScript("https://js.payrexhq.com");
 	const clientRef = useRef();
   const [clientReady, setClientReady] = useState(false);
@@ -66,7 +68,7 @@ export function PaymentElement({
 			const paymentElement = elements.create("payment", paymentElementOpts);
 			paymentElement.mount(`#${paymentElementId}`);
 		}
-	}, [clientReady, clientSecret, layout]);
+	}, [clientReady, clientSecret, layout, paymentElementId]);
 
 	return <div id={paymentElementId}></div>;
 }
