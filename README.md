@@ -1,30 +1,31 @@
-# React + TypeScript + Vite
+# Payrex React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A collection of React components and utilities for [Payrex](https://www.payrexhq.com/)
 
-Currently, two official plugins are available:
+## Usage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```tsx
+import { PaymentElement } from 'payrex-react';
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+export function MyCheckoutPage() {
+  return (
+    <div>
+      {/** Some other checkout details and/or components here */}
+      <PaymentElement apiKey="YOUR_PUBLIC_KEY" amount={10000} />
+    </div>
+  )
 }
 ```
+:warning: Note: For NextJS users, you can only use this with [client components](https://nextjs.org/docs/app/building-your-application/rendering/client-components).
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Components
+
+### `<PaymentElement />` {#PaymentElement}
+
+Creates a [Payrex Payment Element integration](https://docs.payrexhq.com/docs/guide/developer_handbook/payments/integrations/elements#2-create-a-checkout-page-on-the-client-side), which is basically a drop-in payment interface inserted in your checkout page.
+
+#### Props
+- **apiKey** (***required***) - Your public API key to be used for initializing PayrexJS client-side library.
+- **amount** (***required***) - The integer value to be used as `amount` for the [payment intent creation](https://docs.payrexhq.com/docs/api/payment_intents/create).
+- **paymentMethods** - The array of strings to be used as `payment_methods` for the [payment intent creation](https://docs.payrexhq.com/docs/api/payment_intents/create). Defaults to `["card", "gcash"]`.
+- **paymentIntentUrl** - The URL to send both amount and payment methods to. Ideally this is a custom API endpoint on your server. You should receive both `amount` and `payment_methods` as part of the request payload to create the payment intent. Check out official and community-supported [libraries](https://docs.payrexhq.com/docs/guide/developer_handbook/libraries_and_tools) for the programming language of your choice.

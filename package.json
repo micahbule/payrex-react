@@ -1,11 +1,17 @@
 {
-  "name": "payrex-react-elements",
+  "name": "payrex-react",
+  "description": "A collection of React components and utilities for Payrex",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "files": ["dist"],
+  "author": {
+    "name": "Micah Andrew Bule",
+    "email": "micah.bule@gmail.com",
+    "url": "http://github.com/micahbule"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --p ./tsconfig.build.json && vite build",
