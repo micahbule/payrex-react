@@ -1,8 +1,7 @@
 {
   "name": "payrex-react",
   "description": "A collection of React components and utilities for Payrex",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
