@@ -11,7 +11,19 @@ export function MyCheckoutPage() {
   return (
     <div>
       {/** Some other checkout details and/or components here */}
-      <PaymentElement apiKey="YOUR_PUBLIC_KEY" amount={10000} />
+      <PaymentElement
+        apiKey="YOUR_PUBLIC_KEY"
+        amount={10000}
+        renderButton={({ onSubmit, loading }) => (
+          <button type="button" disabled={loading} onClick={onSubmit}>Pay Now</button>
+        )}
+        onAttach={(paymentIntent) => {
+          // do something with payment intent
+        }}
+        onError={(error) => {
+          // do something with error
+        }}
+      />
     </div>
   )
 }
@@ -27,12 +39,7 @@ Creates a [Payrex Payment Element integration](https://docs.payrexhq.com/docs/gu
 #### Props
 - **apiKey** (***required***) - Your public API key to be used for initializing PayrexJS client-side library.
 - **amount** (***required***) - The integer value to be used as `amount` for the [payment intent creation](https://docs.payrexhq.com/docs/api/payment_intents/create).
-- **renderButton** (***required***) - Render prop to render a payment button to trigger the payment submission workflow. It is a callback function with the following sample implementation:
-```tsx
-({ onSubmit, loading }) => (
-  <button type="button" disabled={loading} onClick={onSubmit}>Pay Now</button>
-)
-```
+- **renderButton** (***required***) - Render prop to render a payment button to trigger the payment submission workflow. Refer to implementation above.
 - **onAttach** (***required***) - Callback handler when the payment intent has been successfully attached to a payment method. It should receive the payment intent object as the first parameter.
 - **onError** (***required***) - Callback handler for any errors, particularly one coming from the Payrex API.
 - **paymentMethods** - The array of strings to be used as `payment_methods` for the [payment intent creation](https://docs.payrexhq.com/docs/api/payment_intents/create). Defaults to `["card", "gcash"]`.
