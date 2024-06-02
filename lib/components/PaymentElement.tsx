@@ -12,6 +12,9 @@ type CheckoutProps = {
   amount: number;
   returnUrl: string;
   renderButton: (renderButtonProps: RenderButtonProps) => ReactNode;
+  // TO-DO: Create type for payment intent
+  onAttach: (paymentIntent: unknown) => void;
+  onError: (err: Error) => void;
   paymentMethods?: string[];
 	paymentIntentUrl?: string;
 	layout?: string;
@@ -31,6 +34,8 @@ export const PaymentElement = React.memo(function ({
   paymentElementId = DEFAULT_PAYMENT_ELEMENT_ID,
 	layout = "accordion",
   renderButton,
+  onAttach,
+  onError,
 }: CheckoutProps) {
 	const libStatus = useScript("https://js.payrexhq.com");
 	const clientRef = useRef();
@@ -93,11 +98,13 @@ export const PaymentElement = React.memo(function ({
     client.attachPaymentMethod({ elements, options: { return_url: finalReturnUrl } })
       .then(() => {
         setSubmitting(false);
+
+        // @ts-expect-error Client is only loaded after PayrexJS script
+        return client.getPaymentIntent(clientSecret);
       })
-      .catch(() => {
-        /** TO-DO: Error handling on attach payment method */
-      })
-  }, [finalReturnUrl]);
+      .then(onAttach)
+      .catch(onError)
+  }, [finalReturnUrl, clientSecret, onAttach, onError]);
 
 	return (
     <>
