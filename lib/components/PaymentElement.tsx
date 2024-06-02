@@ -95,13 +95,14 @@ export const PaymentElement = React.memo(function ({
     // @ts-expect-error Client is only loaded after PayrexJS script
     client.attachPaymentMethod({ elements, options: { return_url: finalReturnUrl } })
       .then(() => {
-        setSubmitting(false);
-
         // @ts-expect-error Client is only loaded after PayrexJS script
         return client.getPaymentIntent(clientSecret);
       })
       .then(onAttach)
       .catch(onError)
+      .finally(() => {
+        setSubmitting(false);
+      });
   }, [finalReturnUrl, clientSecret, onAttach, onError]);
 
 	return (
