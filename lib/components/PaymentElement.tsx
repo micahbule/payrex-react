@@ -54,9 +54,6 @@ export const PaymentElement = React.memo(function ({
 
   useEffect(() => {
     if (clientReady) {
-      /**
-			 * TO-DO: Error handling for payment intent creation
-			 */
 			fetch(paymentIntentUrl, {
         headers: {
           'Content-Type': 'application/json',
@@ -68,9 +65,10 @@ export const PaymentElement = React.memo(function ({
 				.then((response) => response.json())
 				.then((payload) => {
 					setClientSecret(payload.client_secret);
-				});
+				})
+        .catch(onError)
     }
-  }, [clientReady, amount, paymentMethods, paymentIntentUrl]);
+  }, [clientReady, amount, paymentMethods, paymentIntentUrl, onError]);
 
 	useEffect(() => {
 		if (clientReady && clientSecret) {
