@@ -1,6 +1,6 @@
-"use client";
 import { useScript } from "../utils/use-script";
 import React, { useEffect, useRef, useState, ReactNode, useCallback } from "react";
+import { useUrl } from "../utils/use-url";
 
 type RenderButtonProps = {
   onSubmit: () => void;
@@ -11,13 +11,12 @@ type CheckoutProps = {
 	apiKey: string;
   amount: number;
   returnUrl: string;
+  renderButton: (renderButtonProps: RenderButtonProps) => ReactNode;
   paymentMethods?: string[];
 	paymentIntentUrl?: string;
 	layout?: string;
   paymentElementId?: string;
-} & {
-  renderButton: (renderButtonProps: RenderButtonProps) => ReactNode
-};
+}
 
 const DEFAULT_PAYMENT_METHODS = ['card', 'gcash'];
 const DEFAULT_PAYMENT_INTENT_URL = '/api/payrex/payment-intent';
@@ -82,6 +81,8 @@ export const PaymentElement = React.memo(function ({
 		}
 	}, [clientReady, clientSecret, layout, paymentElementId]);
 
+  const finalReturnUrl = useUrl(returnUrl);
+
   const handleSubmitPayment = useCallback(() => {
     const client = clientRef.current;
     const elements = elementsRef.current;
@@ -89,19 +90,19 @@ export const PaymentElement = React.memo(function ({
     setSubmitting(true);
 
     // @ts-expect-error Client is only loaded after PayrexJS script
-    client.attachPaymentMethod({ elements, options: { return_url: returnUrl } })
+    client.attachPaymentMethod({ elements, options: { return_url: finalReturnUrl } })
       .then(() => {
         setSubmitting(false);
       })
       .catch(() => {
         /** TO-DO: Error handling on attach payment method */
       })
-  }, [returnUrl]);
+  }, [finalReturnUrl]);
 
 	return (
     <>
       <div id={paymentElementId}></div>
-      {typeof renderButton !== 'undefined' && renderButton({ onSubmit: handleSubmitPayment, loading: submitting })}
+      {renderButton({ onSubmit: handleSubmitPayment, loading: submitting })}
     </>
   );
 });
